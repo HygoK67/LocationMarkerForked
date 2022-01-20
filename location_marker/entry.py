@@ -87,7 +87,7 @@ def print_location(location: Location, printer: Callable[[RTextBase], Any], *, s
 	if location.desc is not None:
 		name_text.h(location.desc)
 	text = RTextList(
-		name_text.h('点击以显示详情').c(RAction.run_command, '{} info {}'.format(constants.PREFIX, location.name)),
+		name_text.h('点击以传送').c(RAction.run_command, '{} tp {}'.format(constants.PREFIX, location.name)),
 		' ',
 		get_coordinate_text(location.pos, location.dim),
 		' §7@§r ',
@@ -192,6 +192,11 @@ def show_location_detail(source: CommandSource, name):
 	else:
 		source.reply('未找到路标§b{}§r'.format(name))
 
+def tp_to_location(source: CommandSource, name):
+	loc = storage.get(name)
+	if(loc is not None):
+		x, y, z = map(round, loc.pos)
+		source.get_server().execute(f'/execute in {constants.dimension_mapping_dict[loc.dim]} run tp {source.player} {x} {y} {z}')
 
 def on_load(server: PluginServerInterface, old_inst):
 	global config, storage, server_inst
@@ -241,6 +246,11 @@ def on_load(server: PluginServerInterface, old_inst):
 		then(
 			Literal('info').then(
 				QuotableText('name').runs(lambda src, ctx: show_location_detail(src, ctx['name']))
+			)
+		).
+		then(
+			Literal('tp').then(
+				QuotableText('name').runs(lambda src, ctx: tp_to_location(src, ctx['name']))
 			)
 		)
 	)
