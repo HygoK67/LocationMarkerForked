@@ -3,7 +3,7 @@ Location Marker
 
 A server side waypoint manager
 
-Inspired by LucunJi's [Locations](https://github.com/TISUnion/Locations) plugin, and it's compatible with the data of LucunJi's Locations plugin
+Forked from the one made by Fallen-Breath to make players can easily tp to waypoints through click
 
 Marker data file path: `config/location_marker/locations.json`
 
